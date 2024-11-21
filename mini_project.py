@@ -1,11 +1,11 @@
 class DNA:
-    def _init_(self, sequence):
+    def __init__(self, sequence):
         """Initialize the DNA object with a sequence."""
         self.sequence = sequence.upper()  # Ensure the sequence is in uppercase
 
-    def _repr_(self):
+    def __repr__(self):
         """Return a string representation of the DNA object."""
-        return 'DNA(sequence="' + self.sequence + '")'
+        return f'DNA(sequence="{self.sequence}")'
 
     def compare(self, other_dna):
         """Compare this DNA sequence with another and return the Hamming distance."""
@@ -13,39 +13,26 @@ class DNA:
             print("DNA sequences must be of the same length to compare.")
             return None
         
-        hamming_distance = 0
-        for i in range(len(self.sequence)):
-            if self.sequence[i] != other_dna.sequence[i]:
-                hamming_distance += 1
-        
+        hamming_distance = sum(1 for i in range(len(self.sequence)) if self.sequence[i] != other_dna.sequence[i])
         return hamming_distance
 
     def transcribe(self):
         """Transcribe the DNA sequence to RNA (replace 'T' with 'U')."""
         return self.sequence.replace('T', 'U')
 
-    def _len_(self):
+    def __len__(self):
         """Return the length of the DNA sequence."""
         return len(self.sequence)
 
     def is_valid(self):
         """Check if the DNA sequence is valid (only contains A, T, C, G)."""
-        valid_bases = {'A', 'T', 'C', 'G'}
-        for base in self.sequence:
-            if base not in valid_bases:
-                return False
-        return True
+        return all(base in {'A', 'T', 'C', 'G'} for base in self.sequence)
 
 # Function to take DNA sequence input from the user
 def get_dna_input(prompt="Enter a DNA sequence: "):
     while True:
         dna_sequence = input(prompt).strip().upper()  # Get input and ensure it's uppercase
-        is_valid = True
-        for base in dna_sequence:
-            if base not in {'A', 'T', 'C', 'G'}:
-                is_valid = False
-                break
-        if is_valid:
+        if all(base in {'A', 'T', 'C', 'G'} for base in dna_sequence):
             return dna_sequence
         else:
             print("Invalid sequence. Please enter a DNA sequence containing only A, T, C, G.")
@@ -77,4 +64,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()   
+    main()
